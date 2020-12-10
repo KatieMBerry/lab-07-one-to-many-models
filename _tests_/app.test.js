@@ -58,5 +58,19 @@ describe('app routes', () => {
         expect(res.body).toHaveLength(alpaca_walkers.length);
     });
 
+    it('retrieves one alpaca_walkers by ID via GET', async () => {
+        const alpaca_walker = await Alpaca_walker.insert(
+            {
+                name: 'Marco',
+                energyLevel: 'apathetic',
+                yearsOfExperience: 2
+            }
+        );
+
+        const res = await request(app)
+            .get(`/alpaca-walkers/${alpaca_walker.id}`);
+
+        expect(res.body).toEqual(alpaca_walker);
+    });
 });
 
