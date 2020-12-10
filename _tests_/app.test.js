@@ -2,6 +2,7 @@ const fs = require('fs');
 const request = require('supertest');
 const app = require('../lib/app');
 const pool = require('../lib/utils/pool');
+const Alpaca_walker = require('../lib/models/Alpaca_walker')
 
 
 describe('app routes', () => {
@@ -29,6 +30,32 @@ describe('app routes', () => {
             energyLevel: 'fiesty',
             yearsOfExperience: 5
         });
+    });
+
+    it('retrieves all alpaca_walkers via GET', async () => {
+        const alpaca_walkers = await Promise.all([
+            {
+                name: 'Jill',
+                energyLevel: 'fiesty',
+                yearsOfExperience: 5
+            },
+            {
+                name: 'Ron',
+                energyLevel: 'mellow',
+                yearsOfExperience: 20
+            },
+            {
+                name: 'Marco',
+                energyLevel: 'apathetic',
+                yearsOfExperience: 2
+            }
+        ].map(alpaca_walker => Alpaca_walker.insert(alpaca_walker)));
+
+        const res = await request(app)
+            .get('/alpaca-walkers');
+
+        expect(res.body).toEqual(expect.arrayContaining(alpaca_walkers));
+        expect(res.body).toHaveLength(alpaca_walkers.length);
     });
 
 });
