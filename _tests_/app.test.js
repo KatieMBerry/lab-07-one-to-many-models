@@ -222,6 +222,39 @@ describe('app routes', () => {
         });
     });
 
+    it('updates an alpaca via PUT', async () => {
+        const alpaca_walker = await Alpaca_walker.insert({
+            name: 'Marco',
+            energyLevel: 'apathetic',
+            yearsOfExperience: 2
+        });
+
+        const alpaca = await Alpaca.insert({
+            name: 'Darcy',
+            age: 3,
+            disposition: 'shy',
+            walkerId: 1
+        });
+
+        const res = await request(app)
+            .put(`/alpacas/${alpaca.id}`)
+            .send({
+                name: 'Darcy',
+                age: 3,
+                disposition: 'mean',
+                walkerId: 1
+            });
+
+        expect(res.body).toEqual({
+            id: alpaca.id,
+            name: 'Darcy',
+            age: 3,
+            disposition: 'mean',
+            walkerId: '1'
+        });
+    });
+
+
     it('deletes an alpaca by ID via DELETE, and returns it', async () => {
         const alpaca_walker = await Alpaca_walker.insert({
             name: 'Marco',
