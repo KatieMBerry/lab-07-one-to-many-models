@@ -196,5 +196,31 @@ describe('app routes', () => {
         expect(res.body).toHaveLength(alpacas.length);
     });
 
+    it('retrieves an alpaca by ID from the database via GET', async () => {
+        const alpaca_walker = await Alpaca_walker.insert({
+            name: 'Marco',
+            energyLevel: 'apathetic',
+            yearsOfExperience: 2
+        });
+
+        const alpaca = await Alpaca.insert({
+            name: 'Darcy',
+            age: 3,
+            disposition: 'shy',
+            walkerId: 1
+        });
+
+        const response = await request(app)
+            .get(`/alpacas/${alpaca.id}`);
+
+        expect(response.body).toEqual({
+            id: alpaca.id,
+            name: 'Darcy',
+            age: 3,
+            disposition: 'shy',
+            walkerId: '1'
+        });
+    });
+
 });
 
