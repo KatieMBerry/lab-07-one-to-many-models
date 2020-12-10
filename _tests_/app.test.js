@@ -3,19 +3,32 @@ const request = require('supertest');
 const app = require('../lib/app');
 const pool = require('../lib/utils/pool');
 
+
 describe('app routes', () => {
 
-    // beforeEach(() => {
-    //     return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
-    // });
+    beforeEach(() => {
+        return pool.query(fs.readFileSync('./sql/setup.sql', 'utf-8'));
+    });
 
-    // afterAll(() => {
-    //     return pool.end();
-    // });
+    afterAll(() => {
+        return pool.end();
+    });
 
     it('creates a new alpaca_walker via POST', async () => {
-        const response = await request(app).get('/');
-        expect(response.body).toEqual({ hello: 'world' });
+        const res = await request(app)
+            .post('/alpaca-walkers')
+            .send({
+                name: 'Jill',
+                energyLevel: 'fiesty',
+                yearsOfExperience: 5
+            });
+
+        expect(res.body).toEqual({
+            id: '1',
+            name: 'Jill',
+            energyLevel: 'fiesty',
+            yearsOfExperience: 5
+        });
     });
 
 });
