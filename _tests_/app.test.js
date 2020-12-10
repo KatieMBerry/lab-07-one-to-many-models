@@ -135,24 +135,31 @@ describe('app routes', () => {
     // });
 
     //alpacas routes
-    // it('creates a new alpaca via POST', async () => {
-    //     const res = await request(app)
-    //         .post('/alpacas')
-    //         .send({
-    //             name: 'Blossom',
-    //             age: 5,
-    //             disposition: 'sunny',
-    //             walkerId: 1
-    //         });
+    it('creates a new alpaca via POST', async () => {
 
-    //     expect(res.body).toEqual({
-    //         id: '1',
-    //         name: 'Blossom',
-    //         age: 5,
-    //         disposition: 'sunny',
-    //         walkerId: 1
-    //     });
-    // });
+        const alpaca_walker = await Alpaca_walker.insert({
+            name: 'Marco',
+            energyLevel: 'apathetic',
+            yearsOfExperience: 2
+        });
+
+        const res = await request(app)
+            .post('/alpacas')
+            .send({
+                name: 'Blossom',
+                age: 5,
+                disposition: 'sunny',
+                walkerId: '1'
+            });
+
+        expect(res.body).toEqual({
+            id: '1',
+            name: 'Blossom',
+            age: 5,
+            disposition: 'sunny',
+            walkerId: '1'
+        });
+    });
 
     it('retrieves all alpacas via GET', async () => {
         const alpaca_walker = await Alpaca_walker.insert({
