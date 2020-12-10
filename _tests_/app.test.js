@@ -222,5 +222,32 @@ describe('app routes', () => {
         });
     });
 
+    it('deletes an alpaca by ID via DELETE, and returns it', async () => {
+        const alpaca_walker = await Alpaca_walker.insert({
+            name: 'Marco',
+            energyLevel: 'apathetic',
+            yearsOfExperience: 2
+        });
+
+        const alpaca = await Alpaca.insert({
+            name: 'Darcy',
+            age: 3,
+            disposition: 'shy',
+            walkerId: 1
+        });
+
+        const response = await request(app)
+            .delete(`/alpacas/${alpaca.id}`)
+            .send(alpaca)
+
+        expect(response.body).toEqual({
+            id: alpaca.id,
+            name: 'Darcy',
+            age: 3,
+            disposition: 'shy',
+            walkerId: '1'
+        });
+    });
+
 });
 
